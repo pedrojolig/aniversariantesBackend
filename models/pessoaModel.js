@@ -6,7 +6,9 @@ const Pessoa = sequelize.define("Pessoa", {
   Nome: { type: DataTypes.STRING(100), allowNull: false },
   DataNascimento: { type: DataTypes.DATEONLY, allowNull: false },
   Grupo: { type: DataTypes.INTEGER, allowNull: false },
-  Presente: { type: DataTypes.STRING(255), allowNull: true }
+  Presente: { type: DataTypes.STRING(255), allowNull: true },
+  Confirmado: { type: DataTypes.BOOLEAN, defaultValue: false },
+  MensagemEnviada: { type: DataTypes.BOOLEAN, defaultValue: false }
 }, {
   tableName: "pessoas",
   timestamps: false

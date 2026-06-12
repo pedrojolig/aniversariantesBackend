@@ -1,16 +1,17 @@
 const express = require("express");
 const cors = require("cors");
-const sequelize = require("./databaseConnection");
-const pessoasController = require("./controllers/pessoasController");
+const sequelize = require("./databaseConnection"); // ✅ corrigido para o nome certo
+const pessoasRoutes = require("./routes/pessoas");
 const { enviarLembretes } = require("./lembreteService");
 
 const app = express();
 app.use(express.json());
 app.use(cors());
 
-app.use("/api/pessoas", pessoasController);
+// Rotas principais
+app.use("/api/pessoas", pessoasRoutes);
 
-// rota de teste para disparar e-mails manualmente
+// Rota de teste para disparar lembretes manualmente
 app.get("/api/testar-lembretes", async (req, res) => {
   try {
     await enviarLembretes();
@@ -20,7 +21,10 @@ app.get("/api/testar-lembretes", async (req, res) => {
   }
 });
 
+// Conexão com o banco e inicialização do servidor
 sequelize.authenticate().then(() => {
   console.log("Conectado ao banco!");
   app.listen(3000, () => console.log("Servidor rodando na porta 3000"));
+}).catch(err => {
+  console.error("Erro ao conectar ao banco:", err);
 });

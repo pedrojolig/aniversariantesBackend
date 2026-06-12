@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Pessoa = require("../models/pessoaModel");
 const { Op, fn, col } = require("sequelize");
-const sequelize = require("../databaseConnection");
+const sequelize = require("../databaseConnection"); // ✅ corrigido
 
 // GET todas as pessoas
 router.get("/", async (req, res) => {
@@ -56,6 +56,20 @@ router.put("/:id", async (req, res) => {
   } catch (error) {
     console.error("Erro ao editar pessoa:", error);
     res.status(500).json({ error: "Erro ao editar pessoa" });
+  }
+});
+
+// PUT confirmar lembrete
+router.put("/confirmar/:id", async (req, res) => {
+  try {
+    const pessoa = await Pessoa.findByPk(req.params.id);
+    if (!pessoa) return res.status(404).json({ erro: "Pessoa não encontrada" });
+
+    pessoa.Confirmado = true;
+    await pessoa.save();
+    res.json({ mensagem: "Lembrete confirmado com sucesso" });
+  } catch (err) {
+    res.status(400).json({ erro: err.message });
   }
 });
 
